@@ -10,11 +10,9 @@
  */
 package se.edu.gui.aufgabe04;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFormattedTextField.AbstractFormatter;
-import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -37,25 +35,27 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        PanelPreisUmrechner = new javax.swing.JPanel();
         lblFlaschengroesse = new javax.swing.JLabel();
         lblFlaschenpreis = new javax.swing.JLabel();
         lblPreisProL = new javax.swing.JLabel();
-        flaschengroesse = new javax.swing.JComboBox();
+        cbFlaschengroesse = new javax.swing.JComboBox();
         btnUmrechnenDown = new javax.swing.JButton();
         btnUmrechnenUp = new javax.swing.JButton();
         lblEuro0 = new javax.swing.JLabel();
         lblEuro1 = new javax.swing.JLabel();
-        ftfFlaschenpreis = new javax.swing.JFormattedTextField();
-        ftfPreisProL = new javax.swing.JFormattedTextField();
+        tfFlaschenpreis = new javax.swing.JTextField();
+        tfPreisProL = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        PanelPreisUmrechner.setLayout(new java.awt.GridBagLayout());
 
         lblFlaschengroesse.setText("Flaschengröße:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(lblFlaschengroesse, gridBagConstraints);
+        PanelPreisUmrechner.add(lblFlaschengroesse, gridBagConstraints);
 
         lblFlaschenpreis.setText("Flaschenpreis:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -63,7 +63,7 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(lblFlaschenpreis, gridBagConstraints);
+        PanelPreisUmrechner.add(lblFlaschenpreis, gridBagConstraints);
 
         lblPreisProL.setText("Preis pro L:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -71,16 +71,16 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(lblPreisProL, gridBagConstraints);
+        PanelPreisUmrechner.add(lblPreisProL, gridBagConstraints);
 
-        flaschengroesse.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0,187l", "0,25l", "0,375l", "0,5l", "0,62l", "0,75l", "0,8l", "1l", "1,5l" }));
+        cbFlaschengroesse.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0,187l", "0,25l", "0,375l", "0,5l", "0,62l", "0,75l", "0,8l", "1l", "1,5l" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(flaschengroesse, gridBagConstraints);
+        PanelPreisUmrechner.add(cbFlaschengroesse, gridBagConstraints);
 
         btnUmrechnenDown.setText("↓");
         btnUmrechnenDown.addActionListener(new java.awt.event.ActionListener() {
@@ -92,72 +92,81 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(btnUmrechnenDown, gridBagConstraints);
+        PanelPreisUmrechner.add(btnUmrechnenDown, gridBagConstraints);
 
         btnUmrechnenUp.setText("↑");
+        btnUmrechnenUp.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(btnUmrechnenUp, gridBagConstraints);
+        PanelPreisUmrechner.add(btnUmrechnenUp, gridBagConstraints);
 
         lblEuro0.setText("€");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        getContentPane().add(lblEuro0, gridBagConstraints);
+        PanelPreisUmrechner.add(lblEuro0, gridBagConstraints);
 
         lblEuro1.setText("€");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
-        getContentPane().add(lblEuro1, gridBagConstraints);
+        PanelPreisUmrechner.add(lblEuro1, gridBagConstraints);
 
-        ftfFlaschenpreis.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        ftfFlaschenpreis.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        ftfFlaschenpreis.setText("0,00");
-        ftfFlaschenpreis.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                ftfFlaschenpreisKeyTyped(evt);
-            }
-        });
+        tfFlaschenpreis.setDocument(new PreisDocument());
+        tfFlaschenpreis.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(ftfFlaschenpreis, gridBagConstraints);
-        ((NumberFormatter)ftfFlaschenpreis.getFormatter()).setAllowsInvalid(false);
+        PanelPreisUmrechner.add(tfFlaschenpreis, gridBagConstraints);
 
-        ftfPreisProL.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
-        ftfPreisProL.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        ftfPreisProL.setText("0,00");
+        tfPreisProL.setDocument(new PreisDocument());
+        tfPreisProL.setEditable(false);
+        tfPreisProL.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(ftfPreisProL, gridBagConstraints);
+        PanelPreisUmrechner.add(tfPreisProL, gridBagConstraints);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(PanelPreisUmrechner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(148, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(PanelPreisUmrechner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(67, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUmrechnenDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUmrechnenDownActionPerformed
+        NumberFormat nf = NumberFormat.getNumberInstance();
         double flaschenpreis;
-        AbstractFormatter formatter = ftfFlaschenpreis.getFormatter();
+        double flaschengroeße;
         try {
-            flaschenpreis = Double.parseDouble(formatter.stringToValue(ftfFlaschenpreis.getText()).toString());
-            ftfPreisProL.setValue(formatter.stringToValue((flaschenpreis * 10) + ""));
+            flaschenpreis = nf.parse(tfFlaschenpreis.getText()).doubleValue();
+            flaschengroeße = nf.parse(cbFlaschengroesse.getItemAt(cbFlaschengroesse.getSelectedIndex()).toString()).doubleValue();
+            tfPreisProL.setText(new DecimalFormat("#.00").format(1 / flaschengroeße * flaschenpreis));
         } catch (ParseException ex) {
-            Logger.getLogger(GUIAufgabe04.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            //Logger.getLogger(GUIAufgabe04.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }//GEN-LAST:event_btnUmrechnenDownActionPerformed
-
-    private void ftfFlaschenpreisKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ftfFlaschenpreisKeyTyped
-        ftfFlaschenpreis.getText().matches("\\d{1,3}(\\.?\\d{3})*(,\\d{1,2})?");
-    }//GEN-LAST:event_ftfFlaschenpreisKeyTyped
 
     /**
      * @param args the command line arguments
@@ -174,15 +183,16 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel PanelPreisUmrechner;
     private javax.swing.JButton btnUmrechnenDown;
     private javax.swing.JButton btnUmrechnenUp;
-    private javax.swing.JComboBox flaschengroesse;
-    private javax.swing.JFormattedTextField ftfFlaschenpreis;
-    private javax.swing.JFormattedTextField ftfPreisProL;
+    private javax.swing.JComboBox cbFlaschengroesse;
     private javax.swing.JLabel lblEuro0;
     private javax.swing.JLabel lblEuro1;
     private javax.swing.JLabel lblFlaschengroesse;
     private javax.swing.JLabel lblFlaschenpreis;
     private javax.swing.JLabel lblPreisProL;
+    private javax.swing.JTextField tfFlaschenpreis;
+    private javax.swing.JTextField tfPreisProL;
     // End of variables declaration//GEN-END:variables
 }
