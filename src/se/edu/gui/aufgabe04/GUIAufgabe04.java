@@ -122,6 +122,11 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
                 textfieldMarkAll(evt);
             }
         });
+        tfFlaschenpreis.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                beep(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -181,6 +186,13 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
     private void textfieldMarkAll(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textfieldMarkAll
         ((JTextField)evt.getComponent()).selectAll();
     }//GEN-LAST:event_textfieldMarkAll
+
+    private void beep(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_beep
+        if (!(Character.isDigit(evt.getKeyChar()) || evt.getKeyChar() == ',')) {
+            java.awt.Toolkit.getDefaultToolkit().beep();
+            System.out.println("beep");
+        }
+    }//GEN-LAST:event_beep
 
     /**
      * @param args the command line arguments
