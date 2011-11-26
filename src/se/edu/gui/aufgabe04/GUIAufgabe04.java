@@ -10,11 +10,10 @@
  */
 package se.edu.gui.aufgabe04;
 
+import java.awt.event.ItemEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -25,6 +24,13 @@ import javax.swing.event.DocumentListener;
  * @author steeb
  */
 public class GUIAufgabe04 extends javax.swing.JFrame {
+    
+    private enum Richtung {
+        NACH_UNTEN,
+        NACH_OBEN
+    }
+    
+    private Richtung richtung;
 
     /** Creates new form GUIAufgabe04 */
     public GUIAufgabe04() {
@@ -54,6 +60,7 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         tfPreisProL = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridLayout());
 
         PanelPreisUmrechner.setLayout(new java.awt.GridBagLayout());
 
@@ -80,6 +87,11 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         PanelPreisUmrechner.add(lblPreisProL, gridBagConstraints);
 
         cbFlaschengroesse.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0,187l", "0,25l", "0,375l", "0,5l", "0,62l", "0,75l", "0,8l", "1l", "1,5l" }));
+        cbFlaschengroesse.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbFlaschengroesseItemStateChanged(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -116,12 +128,14 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
         PanelPreisUmrechner.add(lblEuro0, gridBagConstraints);
 
         lblEuro1.setText("€");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
         PanelPreisUmrechner.add(lblEuro1, gridBagConstraints);
 
         tfFlaschenpreis.setDocument(new PreisDocument());
@@ -161,22 +175,7 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         PanelPreisUmrechner.add(tfPreisProL, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(PanelPreisUmrechner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(148, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addComponent(PanelPreisUmrechner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
-        );
+        getContentPane().add(PanelPreisUmrechner);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -191,7 +190,8 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
             tfPreisProL.setText(new DecimalFormat("#.00").format(1 / flaschengroeße * flaschenpreis));
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(this, "Falsche Format", "Bitte deutsches Wärhungsformat einhalten", JOptionPane.ERROR_MESSAGE);
-        } 
+        }
+        richtung = Richtung.NACH_UNTEN;
     }//GEN-LAST:event_btnUmrechnenDownActionPerformed
 
     private void textfieldMarkAll(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textfieldMarkAll
@@ -216,7 +216,17 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(this, "Falsche Format", "Bitte deutsches Wärhungsformat einhalten", JOptionPane.ERROR_MESSAGE);
         }
+        richtung = Richtung.NACH_UNTEN;
     }//GEN-LAST:event_btnUmrechnenUpActionPerformed
+
+    private void cbFlaschengroesseItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbFlaschengroesseItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED)
+            if (!tfFlaschenpreis.getText().equals("") && !tfPreisProL.getText().equals(""))
+                if (richtung == Richtung.NACH_OBEN)
+                    btnUmrechnenUpActionPerformed(null);
+                else 
+                    btnUmrechnenDownActionPerformed(null);
+    }//GEN-LAST:event_cbFlaschengroesseItemStateChanged
 
     /**
      * @param args the command line arguments
