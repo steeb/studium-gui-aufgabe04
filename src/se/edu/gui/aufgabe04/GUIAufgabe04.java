@@ -13,6 +13,7 @@ package se.edu.gui.aufgabe04;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import javax.swing.JTextField;
 
 /**
  *
@@ -116,6 +117,11 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
 
         tfFlaschenpreis.setDocument(new PreisDocument());
         tfFlaschenpreis.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfFlaschenpreis.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                textfieldMarkAll(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -126,6 +132,11 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
 
         tfPreisProL.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         tfPreisProL.setInputVerifier(new PreisVerifier());
+        tfPreisProL.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                textfieldMarkAll(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -166,6 +177,10 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
             //Logger.getLogger(GUIAufgabe04.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }//GEN-LAST:event_btnUmrechnenDownActionPerformed
+
+    private void textfieldMarkAll(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textfieldMarkAll
+        ((JTextField)evt.getComponent()).selectAll();
+    }//GEN-LAST:event_textfieldMarkAll
 
     /**
      * @param args the command line arguments
