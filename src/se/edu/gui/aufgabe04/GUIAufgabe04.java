@@ -13,7 +13,12 @@ package se.edu.gui.aufgabe04;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -96,7 +101,11 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         PanelPreisUmrechner.add(btnUmrechnenDown, gridBagConstraints);
 
         btnUmrechnenUp.setText("↑");
-        btnUmrechnenUp.setEnabled(false);
+        btnUmrechnenUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUmrechnenUpActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -117,6 +126,7 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
 
         tfFlaschenpreis.setDocument(new PreisDocument());
         tfFlaschenpreis.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfFlaschenpreis.getDocument().addDocumentListener(new ChangeListener());
         tfFlaschenpreis.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 textfieldMarkAll(evt);
@@ -137,6 +147,7 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
 
         tfPreisProL.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         tfPreisProL.setInputVerifier(new PreisVerifier());
+        tfPreisProL.getDocument().addDocumentListener(new ChangeListener());
         tfPreisProL.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 textfieldMarkAll(evt);
@@ -179,7 +190,7 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
             flaschengroeße = nf.parse(cbFlaschengroesse.getItemAt(cbFlaschengroesse.getSelectedIndex()).toString()).doubleValue();
             tfPreisProL.setText(new DecimalFormat("#.00").format(1 / flaschengroeße * flaschenpreis));
         } catch (ParseException ex) {
-            //Logger.getLogger(GUIAufgabe04.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Falsche Format", "Bitte deutsches Wärhungsformat einhalten", JOptionPane.ERROR_MESSAGE);
         } 
     }//GEN-LAST:event_btnUmrechnenDownActionPerformed
 
@@ -193,6 +204,19 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
             System.out.println("beep");
         }
     }//GEN-LAST:event_beep
+
+    private void btnUmrechnenUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUmrechnenUpActionPerformed
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        double preisprol;
+        double flaschengroeße;
+        try {
+            flaschengroeße = nf.parse(cbFlaschengroesse.getItemAt(cbFlaschengroesse.getSelectedIndex()).toString()).doubleValue();
+            preisprol = nf.parse(tfPreisProL.getText()).doubleValue();
+            tfFlaschenpreis.setText(new DecimalFormat("#.00").format(flaschengroeße * preisprol));
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Falsche Format", "Bitte deutsches Wärhungsformat einhalten", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUmrechnenUpActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,4 +245,30 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
     private javax.swing.JTextField tfFlaschenpreis;
     private javax.swing.JTextField tfPreisProL;
     // End of variables declaration//GEN-END:variables
+
+    class ChangeListener implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent de) {
+            cleanOtherField(de);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent de) {
+            cleanOtherField(de);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent de) {  
+        }
+        
+        private void cleanOtherField(DocumentEvent de) {
+            if (tfFlaschenpreis.hasFocus())
+                tfPreisProL.setText("");
+            else if (tfPreisProL.hasFocus())
+                tfFlaschenpreis.setText("");
+        }
+        
+    }
+
 }
