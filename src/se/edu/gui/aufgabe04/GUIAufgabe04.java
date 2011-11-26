@@ -124,9 +124,8 @@ public class GUIAufgabe04 extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         PanelPreisUmrechner.add(tfFlaschenpreis, gridBagConstraints);
 
-        tfPreisProL.setDocument(new PreisDocument());
-        tfPreisProL.setEditable(false);
         tfPreisProL.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfPreisProL.setInputVerifier(new PreisVerifier());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
